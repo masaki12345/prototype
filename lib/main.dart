@@ -38,10 +38,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Stream getStreamSnapshots(String collection) {
-    return Firestore.instance
+    return Firestore.instance.collection('testdata').snapshots();
+  }
+
+  void delete(DocumentSnapshot doc) async {
+    await Firestore.instance
         .collection('testdata')
-        .orderBy('createdAt', descending: true)
-        .snapshots();
+        .document(doc.documentID)
+        .delete();
   }
 
   Widget _buildBody(BuildContext context) {
@@ -49,15 +53,35 @@ class _MyHomePageState extends State<MyHomePage> {
       stream: getStreamSnapshots("testdata"),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-        return new ListView(
-          children: snapshot.data.documents.map<Widget>((dynamic document) {
-            return new ListTile(
-              title: new Text(document['test']),
-              subtitle: new Text(document['samople']),
-            );
-          }).toList(),
+        return ListView.builder(
+          itemExtent: 80.0,
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) =>
+              _buildListItem(context, snapshot.data.documents[index]),
         );
       },
     );
+  }
+
+  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+    return ListTile(
+        title: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(document['samople']),
+            ),
+          ],
+        ),
+        subtitle: Text(document['test']),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.delete),
+              color: Colors.blue,
+              onPressed: () => delete(document),
+            )
+          ],
+        ));
   }
 }
