@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:prototype/processing.dart';
+
+import 'add.dart';
+import 'col.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,76 +16,116 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePage extends StatelessWidget {
+  final _titleController = TextEditingController();
+  final _samopleController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("でも"),
       ),
-      body: _buildBody(context),
+      body: StreamBuilder(
+        stream: Processing().getNotes(),
+        builder: (BuildContext context, AsyncSnapshot<List<Col>> snapshot) {
+          return Column(
+            children: <Widget>[
+              SizedBox(
+                height: 600,
+                child: ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Col col = snapshot.data[index];
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.black38),
+                          ),
+                        ),
+                        child: ListTile(
+                          title: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(col.test),
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(col.samople),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                color: Colors.black,
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => AddNote(
+                                      col: col,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                color: Colors.blue,
+                                onPressed: () =>
+                                    Processing().deleteNote(col.id),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+              FloatingActionButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        _titleController.clear();
+                        return AlertDialog(
+                          title: Text("追加してね"),
+                          content: TextField(
+                            controller: _titleController,
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text(
+                                "閉じる",
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text(
+                                "登録",
+                              ),
+                              onPressed: () {
+                                Processing().addNote(
+                                  Col(
+                                    test: _titleController.text,
+                                    samople: "_titleController",
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
-  }
-
-  Stream getStreamSnapshots(String collection) {
-    return Firestore.instance.collection('testdata').snapshots();
-  }
-
-  void delete(DocumentSnapshot doc) async {
-    await Firestore.instance
-        .collection('testdata')
-        .document(doc.documentID)
-        .delete();
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return StreamBuilder(
-      stream: getStreamSnapshots("testdata"),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-        return ListView.builder(
-          itemExtent: 80.0,
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: (context, index) =>
-              _buildListItem(context, snapshot.data.documents[index]),
-        );
-      },
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return ListTile(
-        title: Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(document['samople']),
-            ),
-          ],
-        ),
-        subtitle: Text(document['test']),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.delete),
-              color: Colors.blue,
-              onPressed: () => delete(document),
-            )
-          ],
-        ));
   }
 }
