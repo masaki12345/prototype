@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'col.dart';
-import 'processing.dart';
+import 'package:prototype/Models/col.dart';
+import 'package:prototype/Services/processing.dart';
 
 class AddNote extends StatefulWidget {
   final Col col;
