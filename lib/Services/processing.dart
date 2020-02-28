@@ -15,7 +15,7 @@ class Processing {
   Stream<List<Col>> getNotes() {
     return _db
         .collection('testdata')
-        .orderBy('created_at', descending: false)
+        .orderBy('created_at', descending: true)
         .snapshots()
         .map(
           (snapshot) => snapshot.documents

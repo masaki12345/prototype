@@ -2,40 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:prototype/Models/col.dart';
 import 'package:prototype/Services/processing.dart';
 
-class Add extends StatefulWidget {
+class Retouching extends StatefulWidget {
   final Col col;
 
-  const Add({this.col});
+  const Retouching({this.col});
   @override
-  _AddState createState() => _AddState();
+  _RetouchingState createState() => _RetouchingState();
 }
 
-class _AddState extends State<Add> {
+class _RetouchingState extends State<Retouching> {
   GlobalKey<FormState> _key = GlobalKey<FormState>();
+
   TextEditingController _testController;
   TextEditingController _samopleController;
 
-//初期化
   @override
   void initState() {
     super.initState();
-    _testController = TextEditingController();
-    _samopleController = TextEditingController();
-  }
-
-//破棄
-  @override
-  void dispose() {
-    _testController.dispose();
-    _samopleController.dispose();
-    super.dispose();
+    _testController = TextEditingController(text: widget.col.test);
+    _samopleController = TextEditingController(text: widget.col.samople);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('追加'),
+        title: Text('修正'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -76,7 +68,8 @@ class _AddState extends State<Add> {
                   onPressed: () async {
                     if (_key.currentState.validate()) {
                       try {
-                        await Processing().addNote(
+                        await Processing().updateData(
+                          widget.col.id,
                           Col(
                               test: _testController.text,
                               samople: _samopleController.text),
