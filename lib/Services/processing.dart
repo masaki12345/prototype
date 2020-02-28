@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'col.dart';
+import 'package:prototype/Models/col.dart';
 
 class Processing {
   static Processing _firestoreService = Processing._internal();
