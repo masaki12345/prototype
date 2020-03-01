@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prototype/Models/col.dart';
 import 'package:prototype/Services/processing.dart';
+
+import 'retouching.dart';
 
 class Lists extends StatelessWidget {
   @override
@@ -19,15 +23,14 @@ class Lists extends StatelessWidget {
                   onLongPress: () {
                     HapticFeedback.vibrate();
 
-                    // print("a");
+                    print("a");
                     // Processing.vibrate();
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(30),
                     decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(40),
                       gradient: LinearGradient(
                         begin: FractionalOffset.topRight,
                         end: FractionalOffset.bottomRight,
@@ -50,26 +53,66 @@ class Lists extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Container(
-                          child: const ListTile(
-                            leading: Icon(Icons.album),
-                            title: Text('The Enchanted Nightingale'),
-                            subtitle: Text(
-                                'Music by Julie Gable. Lyrics by Sidney Stein.'),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2.5, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(230, 122, 122, 1),
+                              border: Border.all(
+                                color: Color.fromRGBO(230, 122, 122, 1),
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Text(
+                              "JavaScript",
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
                           ),
                         ),
-                        ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: const Text('BUY TICKETS'),
-                              onPressed: () {},
+                        const SizedBox(height: 10.0),
+                        Container(
+                          decoration: BoxDecoration(),
+                          child: Text(
+                            col.test,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            FlatButton(
-                              child: const Text('LISTEN'),
-                              onPressed: () {},
-                            ),
-                          ],
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
                         ),
+                        const SizedBox(height: 10.0),
+                        Container(
+                          child: Text(
+                            col.samople,
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ),
+                        // IconButton(
+                        //   icon: Icon(Icons.edit),
+                        //   color: Colors.blue,
+                        //   onPressed: () => Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (_) => Retouching(
+                        //         col: col,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // IconButton(
+                        //   icon: Icon(Icons.delete),
+                        //   color: Colors.red,
+                        //   onPressed: () => Processing().deleteNote(col.id),
+                        // ),
                       ],
                     ),
                   ),
