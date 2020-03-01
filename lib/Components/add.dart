@@ -14,7 +14,7 @@ class _AddState extends State<Add> {
   GlobalKey<FormState> _key = GlobalKey<FormState>();
   TextEditingController _testController;
   TextEditingController _samopleController;
-
+  String _type = '';
 //初期化
   @override
   void initState() {
@@ -22,6 +22,11 @@ class _AddState extends State<Add> {
     _testController = TextEditingController();
     _samopleController = TextEditingController();
   }
+
+  void _handleRadio(String e) => setState(() {
+        _type = e;
+        print(_type);
+      });
 
 //破棄
   @override
@@ -43,8 +48,27 @@ class _AddState extends State<Add> {
           child: Form(
             key: _key,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                RadioListTile(
+                  activeColor: Colors.blue,
+                  title: Text('CSS'),
+                  value: "CSS",
+                  groupValue: _type,
+                  onChanged: _handleRadio,
+                ),
+                RadioListTile(
+                  title: Text('JavaScript'),
+                  value: "JavaScript",
+                  groupValue: _type,
+                  onChanged: _handleRadio,
+                ),
+                RadioListTile(
+                  title: Text('HTML'),
+                  value: "HTML",
+                  groupValue: _type,
+                  onChanged: _handleRadio,
+                ),
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   controller: _testController,
@@ -79,7 +103,8 @@ class _AddState extends State<Add> {
                         await Processing().addNote(
                           Col(
                               test: _testController.text,
-                              samople: _samopleController.text),
+                              samople: _samopleController.text,
+                              category: _type),
                         );
                         Navigator.pop(context);
                       } catch (e) {

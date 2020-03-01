@@ -59,14 +59,15 @@ class Lists extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 vertical: 2.5, horizontal: 10),
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(230, 122, 122, 1),
+                              color: Colors.redAccent,
+                              // color: Color.fromRGBO(230, 122, 122, 1),
                               border: Border.all(
                                 color: Color.fromRGBO(230, 122, 122, 1),
                               ),
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Text(
-                              "JavaScript",
+                              col.category,
                               style:
                                   TextStyle(fontSize: 12, color: Colors.white),
                             ),
