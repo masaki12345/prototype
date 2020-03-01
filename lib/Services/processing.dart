@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:prototype/Models/col.dart';
+import 'package:vibrate/vibrate.dart';
 
 class Processing {
   static Processing _firestoreService = Processing._internal();
@@ -36,6 +38,13 @@ class Processing {
 
   Future<void> updateData(String id, Col col) {
     return _db.collection('testdata').document(id).updateData(col.ttMap());
-    ;
   }
+
+  // static Future<void> vibrate() async {
+  //   bool canVibrate = await Vibrate.canVibrate;
+  //   canVibrate ? Vibrate.feedback(FeedbackType.medium) : null;
+  // }
+  // static Future<void> vibrate() async {
+  //   await SystemChannels.platform.invokeMethod<void>('HapticFeedback.vibrate');
+  // }
 }
