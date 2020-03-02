@@ -26,6 +26,20 @@ class Processing {
         );
   }
 
+  Stream<List<Col>> getcategory() {
+    return _db
+        .collection('category_list')
+        .orderBy('created_at', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.documents
+              .map(
+                (doc) => Col.cateMap(doc.data, doc.documentID),
+              )
+              .toList(),
+        );
+  }
+
   Future<void> addNote(Col col) {
     return _db.collection('testdata').add(col.ttMap());
   }
@@ -36,6 +50,10 @@ class Processing {
 
   Future<void> updateData(String id, Col col) {
     return _db.collection('testdata').document(id).updateData(col.ttMap());
+  }
+
+  Future<void> addcategory(Col col) {
+    return _db.collection('category_list').add(col.ccMap());
   }
 
   // static Future<void> vibrate() async {

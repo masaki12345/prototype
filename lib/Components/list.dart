@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:prototype/Models/col.dart';
 import 'package:prototype/Services/processing.dart';
 
-import 'retouching.dart';
-
 class Lists extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -54,25 +52,7 @@ class Lists extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 2.5, horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              // color: Color.fromRGBO(230, 122, 122, 1),
-                              border: Border.all(
-                                color: Color.fromRGBO(230, 122, 122, 1),
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Text(
-                              col.category,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                        ),
+                            alignment: Alignment.topLeft, child: todoType(col)),
                         const SizedBox(height: 10.0),
                         Container(
                           decoration: BoxDecoration(),
@@ -121,6 +101,48 @@ class Lists extends StatelessWidget {
               }),
         );
       },
+    );
+  }
+
+  Widget todoType(Col col) {
+    Color colorval;
+    String category;
+    switch (col.category) {
+      case 'CSS':
+        category = "CSS";
+        colorval = Color(0xff4158ba);
+        break;
+      case 'JavaScript':
+        category = "JavaScript";
+        colorval = Color(0xfffb537f);
+        break;
+      case 'HTML':
+        category = "HTML";
+        colorval = Color(0xff4caf50);
+        break;
+      case 'e':
+        category = "e";
+        colorval = Color(0xff9962d0);
+        break;
+      default:
+        category = "その他";
+        colorval = Color(0xff0dc8f5);
+      //
+    }
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 2.5, horizontal: 10),
+      decoration: BoxDecoration(
+        color: colorval,
+        border: Border.all(
+          color: colorval,
+        ),
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: Text(
+        category,
+        style: TextStyle(
+            fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+      ),
     );
   }
 }
